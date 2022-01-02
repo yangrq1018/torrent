@@ -49,6 +49,10 @@ func (ipl *IPList) NumRanges() int {
 	return len(ipl.ranges)
 }
 
+func (ipl *IPList) Add(r Range) {
+	ipl.ranges = append(ipl.ranges, r)
+}
+
 // Return the range the given IP is in. ok if false if no range is found.
 func (ipl *IPList) Lookup(ip net.IP) (r Range, ok bool) {
 	if ipl == nil {
