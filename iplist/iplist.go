@@ -49,7 +49,15 @@ func (ipl *IPList) NumRanges() int {
 	return len(ipl.ranges)
 }
 
-// Return the range the given IP is in. ok if false if no range is found.
+func (ipl *IPList) PushTop(r Range) {
+	ipl.ranges = append([]Range{r}, ipl.ranges...)
+}
+
+func (ipl *IPList) PushEnd(r Range) {
+	ipl.ranges = append(ipl.ranges, r)
+}
+
+// Lookup returns the range the given IP is in. ok if false if no range is found.
 func (ipl *IPList) Lookup(ip net.IP) (r Range, ok bool) {
 	if ipl == nil {
 		return
@@ -151,7 +159,7 @@ func ParseBlocklistP2PLine(l []byte) (r Range, ok bool, err error) {
 	return
 }
 
-// Creates an IPList from a line-delimited P2P Plaintext file.
+// NewFromReader Creates an IPList from a line-delimited P2P Plaintext file.
 func NewFromReader(f io.Reader) (ret *IPList, err error) {
 	var ranges []Range
 	// There's a lot of similar descriptions, so we maintain a pool and reuse
